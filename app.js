@@ -10,6 +10,7 @@ const db = require('./db/db')
 let indexRouter = require('./routes/index')
 let ordersRouter = require('./routes/orders')
 let authRouter = require('./routes/auth')
+let shoppyRouter = require('./routes/shoppy')
 
 let app = express()
 
@@ -18,7 +19,10 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
 app.use(logger('dev'))
-app.use(express.json())
+app.use(express.json({verify: function(req, res, buf, encoding) {
+  req.rawBuf = buf
+}}))
+
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
@@ -27,6 +31,7 @@ app.use(authorization())
 app.use('/', indexRouter)
 app.use('/oauth2', authRouter)
 app.use('/orders', ordersRouter)
+app.use('/shoppy', shoppyRouter)
 
 
 // catch 404 and forward to error handler

@@ -4,7 +4,7 @@ const router = express.Router();
 const Users = require('../db/models/users')
 const JWT = require('jsonwebtoken')
 
-const { REDIRECT_URL, DISCORD_TOKEN_URL, DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET } = process.env
+const { REDIRECT_URL, DISCORD_TOKEN_URL, DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, APP_JWT_SECRET } = process.env
 
 router.get('/authenticate', async (req, res, next) => {
   const auth_url = 'https://discordapp.com/api/oauth2/authorize'
@@ -30,8 +30,6 @@ router.get('/authorize', async (req, res, next) => {
   data.append('client_secret', DISCORD_CLIENT_SECRET)
   data.append('grant_type', 'authorization_code')
   data.append('scope', 'identity')
-
-  const { APP_JWT_SECRET } = process.env
 
   const tokenResp = await fetch(DISCORD_TOKEN_URL, {method: 'POST', body: data})
   const tokenJson = await tokenResp.json()
