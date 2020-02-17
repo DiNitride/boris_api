@@ -5,18 +5,12 @@ let cookieParser = require('cookie-parser')
 let logger = require('morgan')
 let authorization = require('./middleware/authorization')
 
-const db = require('./db/db')
-
 let indexRouter = require('./routes/index')
 let ordersRouter = require('./routes/orders')
 let authRouter = require('./routes/auth')
 let shoppyRouter = require('./routes/shoppy')
 
 let app = express()
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'pug')
 
 app.use(logger('dev'))
 app.use(express.json({verify: function(req, res, buf, encoding) {
@@ -32,7 +26,6 @@ app.use('/', indexRouter)
 app.use('/oauth2', authRouter)
 app.use('/orders', ordersRouter)
 app.use('/shoppy', shoppyRouter)
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
