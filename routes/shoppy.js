@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const Orders = require('../db/models/orders')
+const validateShoppy = require('../middleware/validateShoppy')
+
+router.use(validateShoppy)
 
 router.route('/')
   .post(async (req, res) => {
