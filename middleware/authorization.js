@@ -10,11 +10,11 @@ const authorize = () => async (req, res, next) => {
     try {
       // Decode JWT and get ID from Mongo
       const jwt = JWT.verify(token, APP_JWT_SECRET)
-      const id = await Users.findOne({'discordId': jwt.id})
-      if (id != null) {
-        // If ID exists, they are allowed to access
-        // (Only ID's in Mongo are manually added users)
-        req.user = id
+      const user = await Users.findOne({'discordId': jwt.id})
+      if (user != null) {
+        // If user exists, they are allowed to access
+        // (Only user's in Mongo are manually added users)
+        req.user = user
       }
     } catch (error) {
       // Maybe return smth to tell client to clear
