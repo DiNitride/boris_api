@@ -16,3 +16,4 @@
 `DISCORD_CLIENT_SECRET` - Secret of the Discord app used for auth  
 `SHOPPY_SECRET` - Secret from shoppy used to validate webhooks  
 `MONGO_ADDR` - The location of the MongoDB (e.g. `mongodb://127.0.0.1/boris`)  
+
