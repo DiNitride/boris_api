@@ -23,7 +23,7 @@ router.get('/incomplete', async (req, res) => {
 router.get('/owned', async (req, res) => {
   const orders = await Orders.find({'discordUserId': req.user.discordId})
   res.json({'orders': orders, 'owned_by': req.user})
-}) 
+})
 
 router.post('/claim/:id', async (req, res) => {
 
@@ -56,6 +56,10 @@ router.post('/unclaim/:id', async (req, res) => {
     {'discordUserId': null},
     {'new': true}
   )
+  
+  if (order === null) {
+    return res.json({'error': 'not_owned'})
+  }
 
   res.json({'order': order})
 })
