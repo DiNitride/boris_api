@@ -5,7 +5,6 @@ let cookieParser = require('cookie-parser')
 let logger = require('morgan')
 let authorization = require('./middleware/authorization')
 
-let indexRouter = require('./routes/index')
 let ordersRouter = require('./routes/orders')
 let authRouter = require('./routes/auth')
 let shoppyRouter = require('./routes/shoppy')
@@ -22,7 +21,6 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(authorization())
 
-app.use('/', indexRouter)
 app.use('/oauth2', authRouter)
 app.use('/orders', ordersRouter)
 app.use('/shoppy', shoppyRouter)
@@ -40,7 +38,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500)
-  res.render('error')
+  res.json({'error': error.status})
 })
 
 module.exports = app

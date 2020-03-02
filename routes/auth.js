@@ -5,9 +5,11 @@ const Users = require('../db/models/users')
 const JWT = require('jsonwebtoken')
 
 const { REDIRECT_URL, DISCORD_TOKEN_URL, DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, APP_JWT_SECRET } = process.env
+const auth_url = 'https://discordapp.com/api/oauth2/authorize'
+const discord_url = 'https://discordapp.com/api/v7/users/@me'
+
 
 router.get('/authenticate', async (req, res, next) => {
-  const auth_url = 'https://discordapp.com/api/oauth2/authorize'
   const url = new URL(auth_url)
   const params = new URLSearchParams()
   params.append('client_id', '173708503796416512')
@@ -36,7 +38,6 @@ router.get('/authorize', async (req, res, next) => {
   
   // Get the user's Discord ID
   // Only need to access this once so fuck saving the access and refresh token
-  const discord_url = 'https://discordapp.com/api/v7/users/@me'
   const resp = await fetch(discord_url, { headers: {'Authorization': tokenJson['token_type'] + ' ' + tokenJson['access_token']}})
   const respJson = await resp.json()
 
