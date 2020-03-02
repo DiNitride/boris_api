@@ -20,7 +20,7 @@ router.route('/')
       })
       console.log('Added new order to DB')
     } catch (error) {
-      if (error.code == 11000) {
+      if (error.code === 11000) {
         console.log('Duplicate order ID!')
       } else {
         console.log('Error processing webhook from shoppy')
