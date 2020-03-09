@@ -7,8 +7,18 @@ router.use(requireAuth())
 
 router.get('/', async (req, res) => {
     const orders = await Orders.find({})
-    res.json(orders)
+    res.json({'orders': orders})
   })
+
+router.get('/open', async (req, res) => {
+  const orders = await Orders.find({'complete': false, 'discordUserId': null})
+  res.json({'orders': orders})
+})
+
+router.get('/in-progress', async (req, res) => {
+  const orders = await Orders.find({'complete': false, 'discordUserId': req.user.discordId})
+  res.json({'orders': orders})
+})
 
 router.get('/complete', async (req, res) => {
   const orders = await Orders.find({'complete': true})
@@ -51,6 +61,10 @@ router.post('/unclaim/:id', async (req, res) => {
     return res.json({'error': 'order_not_found'})
   }
 
+  if (await Orders.findOne({'orderId': req.params.id, 'discordUserId': req.user.discordId, 'complete': true}) !== null) {
+    return res.json({'error': 'cannot_unclaim_completed_order'})
+  }
+
   const order = await Orders.findOneAndUpdate(
     {'orderId': req.params.id, 'discordUserId': req.user.discordId},
     {'discordUserId': null},
@@ -82,6 +96,26 @@ router.post('/complete/:id', async (req, res) => {
 
   res.json({'order': order})
 })
+
+router.post('/uncomplete/:id', async (req, res) => {
+
+  if (!(await orderExists(req.params.id))) {
+    return res.json({'error': 'order_not_found'})
+  }
+
+  const order = await Orders.findOneAndUpdate(
+    {'orderId': req.params.id, 'discordUserId': req.user.discordId},
+    {'complete': false},
+    {'new': true}
+  )
+  
+  if (order === null) {
+    return res.json({'error': 'not_owned'})
+  }
+
+  res.json({'order': order})
+})
+
 
 router.get('/:id', async (req, res) => {
   const order = await Orders.findOne({'orderId': req.params.id})

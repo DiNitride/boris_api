@@ -4,12 +4,15 @@ let path = require('path')
 let cookieParser = require('cookie-parser')
 let logger = require('morgan')
 let authorization = require('./middleware/authorization')
+let cors = require('cors')
 
 let ordersRouter = require('./routes/orders')
 let authRouter = require('./routes/auth')
 let shoppyRouter = require('./routes/shoppy')
 
 let app = express()
+
+app.use(cors())
 
 app.use(logger('dev'))
 app.use(express.json({verify: function(req, res, buf, encoding) {
