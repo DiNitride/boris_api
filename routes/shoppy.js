@@ -8,12 +8,12 @@ router.use(validateShoppy())
 router.route('/')
   .post(async (req, res) => {
     console.log('Webhook from shoppy!')
-
+    console.log(req.body)
     try {
       await Orders.init()
       const newOrder = await Orders.create({
         orderId: req.body.data.order.id,
-        discordUserID: null,
+        discordUserId: null,
         price: req.body.data.product.price,
         itemName: req.body.data.product.title,
         complete: false
